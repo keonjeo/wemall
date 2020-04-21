@@ -33,7 +33,8 @@ func init() {
 
 func main() {
 	app := iris.New()
-	app.Logger().SetLevel("debug")
+	logger := app.Logger()
+	logger.SetLevel("debug")
 
 	sess := sessions.New(sessions.Config{
 		// Cookie string, the session's client cookie name, for example: "mysessionid"
@@ -50,7 +51,9 @@ func main() {
 	})
 
 	app.Use(sess.Handler()) // session is always non-nil inside handlers now.
+	logger.Infof("==============")
 	route.Route(app)
+	logger.Infof("==============")
 
 	app.OnErrorCode(iris.StatusNotFound, func(ctx iris.Context) {
 		_, _ = ctx.JSON(iris.Map{
@@ -69,5 +72,8 @@ func main() {
 		})
 	})
 
+	logger.Infof("------------------")
+	logger.Infof("Listening %v port....", config.ServerConfig.Port)
+	logger.Infof("------------------")
 	app.Listen(":" + strconv.Itoa(config.ServerConfig.Port))
 }

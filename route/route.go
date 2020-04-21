@@ -31,6 +31,8 @@ func Route(app *iris.Application) {
 		router.Post("/ueditor", ueditor.Handler)
 	}
 
+	app.Logger().Debug("+++++++++++++++++++++++++++++++++++++++")
+
 	adminRouter := app.Party(apiPrefix+"/admin", admin.Authentication)
 	{
 		adminRouter.Get("/categories", category.AllList)
